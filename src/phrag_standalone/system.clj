@@ -36,17 +36,17 @@
     (gql/graphiql {:endpoint "/graphql"})
     (ring/create-default-handler))))
 
-(defmethod ig/init-key :database.sql/conn-pool [_ jdbc-url]
-  (let [spc (if jdbc-url
-              {:jdbc-url jdbc-url}
-              {:adapter (env :db-type)
+(defmethod ig/init-key :database.sql/conn-pool [_ db-type]
+  (let [spc (if db-type
+              {:adapter db-type
                :username (env :db-user)
                :password (env :db-password)
                :database-name (env :db-name)
                :server-name (env :db-host)
                :port-number (env :db-port)
                :current-schema (env :db-current-schema)
-               :string-type "unspecified"})
+               :string-type "unspecified"}
+              {:jdbc-url (env :jdbc-url)})
         data-src (delay (hkr/make-datasource spc))]
     {:datasource @data-src}))
 
@@ -56,15 +56,14 @@
 (defmethod ig/halt-key! ::server [_ server]
   (.stop server))
 
-(def config {:database.sql/conn-pool (env :jdbc-url)
+(def config {:database.sql/conn-pool (env :db-type)
              :phrag.route/reitit
              {:db (ig/ref :database.sql/conn-pool)
               :default-limit 1000
               :max-nest-level 3}
-              ;:middleware [mid/reitit-cors-middleware]}
              ::app {:gql-route (ig/ref :phrag.route/reitit)}
              ::server {:app (ig/ref ::app)
-                       :options {:port (read-string (env :service-port "3000"))
+                       :options {:port 3000
                                  :join? false}}})
 
 (defn start []
