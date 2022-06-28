@@ -59,11 +59,11 @@
 (def config {:database.sql/conn-pool (env :db-type)
              :phrag.route/reitit
              {:db (ig/ref :database.sql/conn-pool)
-              :default-limit 1000
-              :max-nest-level 3}
+              :default-limit (env :default-limit 1000)
+              :max-nest-level (env :max-nest-level 3)}
              ::app {:gql-route (ig/ref :phrag.route/reitit)}
              ::server {:app (ig/ref ::app)
-                       :options {:port 3000
+                       :options {:port  (read-string (env :service-port "3000"))
                                  :join? false}}})
 
 (defn start []

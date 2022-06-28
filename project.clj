@@ -1,4 +1,4 @@
-(defproject phrag-standalone "0.3.1"
+(defproject phrag-standalone "0.4.5"
   :description ""
   :url "https://github.com/ykskb/phrag-standalone"
   :min-lein-version "2.0.0"
@@ -17,7 +17,7 @@
                  [ring/ring-json "0.5.1"]
                  [ring/ring-jetty-adapter "1.9.3"]
                  [threatgrid/ring-graphql-ui "0.1.3"]
-                 [com.github.ykskb/phrag "0.3.1"]
+                 [com.github.ykskb/phrag "0.4.5"]
                  [hikari-cp "2.14.0"]
                  [environ "1.2.0"]]
   :resource-paths ["resources" "target/resources"]

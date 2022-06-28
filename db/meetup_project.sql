@@ -1,53 +1,54 @@
-create table members (
-    id integer primary key,
-    first_name text,
-    last_name text,
-    email text
+CREATE TABLE members (
+    id INTEGER PRIMARY KEY,
+    first_name TEXT,
+    last_name TEXT,
+    email TEXT
 );
-create table groups (
-    -- id integer primary key,
-    id integer
-    name text,
-    created_at timestamp
+CREATE TABLE groups (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    created_at TIMESTAMP
 );
-create table venues (
-    id integer primary key,
-    name text,
-    postal_code text,
-    prefecture text,
-    city text,
-    street1 text,
-    street2 text,
-    building text
+CREATE TABLE venues (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    postal_code TEXT,
+    prefecture TEXT,
+    city TEXT,
+    street1 TEXT,
+    street2 TEXT,
+    building TEXT
 );
-create table meetups (
-    id integer primary key,
-    title text not null,
-    start_at timestamp,
-    end_at timestamp,
-    venue_id int,
-    group_id int,
-    foreign key(venue_id) references venues(id),
-    foreign key(group_id) references groups(id)
+CREATE TABLE meetups (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    start_at TIMESTAMP,
+    end_at TIMESTAMP,
+    venue_id INT,
+    group_id INT,
+    FOREIGN KEY(venue_id) REFERENCES venues(id),
+    FOREIGN KEY(group_id) REFERENCES groups(id)
 );
-create table member_follow (
-    created_by int,
-    member_id int,
-    foreign key(created_by) references members(id),
-    foreign key(member_id) references members(id),
-    primary key (created_by, member_id)
+CREATE INDEX idx_meetups_venue_id ON meetups(venue_id);
+CREATE INDEX idx_meetups_group_id ON meetups(group_id);
+CREATE TABLE member_follow (
+    created_by INT,
+    member_id INT,
+    FOREIGN KEY(created_by) REFERENCES members(id),
+    FOREIGN KEY(member_id) REFERENCES members(id),
+    PRIMARY KEY(created_by, member_id)
 );
-create table meetups_members (
-    meetup_id int,
-    member_id int,
-    foreign key(meetup_id) references meetups(id),
-    foreign key(member_id) references members(id),
-    primary key (meetup_id, member_id)
+CREATE TABLE meetups_members (
+    meetup_id INT,
+    member_id INT,
+    FOREIGN KEY(meetup_id) REFERENCES meetups(id),
+    FOREIGN KEY(member_id) REFERENCES members(id),
+    PRIMARY KEY(meetup_id, member_id)
 );
-create table groups_members (
-    group_id int,
-    member_id int,
-    foreign key(member_id) references members(id),
-    foreign key(group_id) references groups(id),
-    primary key (group_id, member_id)
+CREATE TABLE groups_members (
+    group_id INT,
+    member_id INT,
+    FOREIGN KEY(member_id) REFERENCES members(id),
+    FOREIGN KEY(group_id) REFERENCES groups(id),
+    PRIMARY KEY(group_id, member_id)
 );
